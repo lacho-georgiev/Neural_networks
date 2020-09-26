@@ -1,26 +1,27 @@
 clear
+type = 'gpuArray';
 variables_best01;
 
-w1 = rand(M, N);
-b1 = rand(M, 1);
-w2 = rand(K, M);
-b2 = rand(K, 1);
+w1 = rand(M, N, type);
+b1 = rand(M, 1, type);
+w2 = rand(K, M, type);
+b2 = rand(K, 1, type);
 
 %training_data_plus_minus_25;
 read_bitmap;
-ceca = zeros(n, 1);
+ceca = zeros(n, 1, type);
 for t = 1: n
     if mod(t, n/100) == 0
         fl = t/n*100
     end
-    avg_w1 = zeros(M, N);
-    avg_b1 = zeros(M, 1);
-    avg_w2 = zeros(K, M);
-    avg_b2 = zeros(K, 1);
+    avg_w1 = zeros(M, N, type);
+    avg_b1 = zeros(M, 1, type);
+    avg_w2 = zeros(K, M, type);
+    avg_b2 = zeros(K, 1, type);
     for batch = 1 : m
-        idx = randi(n_ex);
-        a0 = ex{idx};
-        y = an{idx};
+        idx = randi(n_ex, type);
+        a0 = ex(idx,:)';
+        y = an(idx,:)';
         z1 = w1 * a0 + b1;
         a1 = sigma1(z1);
         z2 = w2 * a1 + b2;
@@ -29,7 +30,7 @@ for t = 1: n
         dC_dw2 = sum(a1.*(sigma1_deriv(z2).*2.*(a2-y))')';
         dC_da2 = 2*(a2 - y);
         dC_db2 = sigma1_deriv(z2).*2.*(a2-y);
-        dC_da1 = zeros(M, 1);
+        dC_da1 = zeros(M, 1, type);
         dC_da1_K = repmat(dC_da1, 1 , K)'; 
         dC_da1_K = dC_da1_K + (w2.*sigma1_deriv(z2).*dC_da2);
         dC_da1 = sum(dC_da1_K)';
