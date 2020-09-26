@@ -6,7 +6,8 @@ b1 = rand(M, 1);
 w2 = rand(K, M);
 b2 = rand(K, 1);
 
-training_data_plus_minus_25;
+%training_data_plus_minus_25;
+read_bitmap;
 ceca = zeros(n, 1);
 for t = 1: n
     if mod(t, n/100) == 0
