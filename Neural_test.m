@@ -1,22 +1,23 @@
-N = 25;
-M = 6;
-K = 2;
+clear
+variables_best01;
 
 w1 = rand(M, N);
 b1 = rand(M, 1);
 w2 = rand(K, M);
 b2 = rand(K, 1);
-training_data;
-n = 10000;
-m = M;
+
+training_data_plus_minus_25;
 ceca = zeros(n, 1);
 for t = 1: n
+    if mod(t, n/100) == 0
+        fl = t/n*100
+    end
     avg_w1 = zeros(M, N);
     avg_b1 = zeros(M, 1);
     avg_w2 = zeros(K, M);
     avg_b2 = zeros(K, 1);
     for batch = 1 : m
-        idx = randi(16);
+        idx = randi(n_ex);
         a0 = ex{idx};
         y = an{idx};
         z1 = w1 * a0 + b1;
@@ -24,7 +25,7 @@ for t = 1: n
         z2 = w2 * a1 + b2;
         a2 = sigma1(z2);
 
-        dC_dw2 = sum(a1*(sigma1_deriv(z2).*2.*(a2-y))')';
+        dC_dw2 = sum(a1.*(sigma1_deriv(z2).*2.*(a2-y))')';
         dC_da2 = 2*(a2 - y);
         dC_db2 = sigma1_deriv(z2).*2.*(a2-y);
         dC_da1 = zeros(M, 1);
