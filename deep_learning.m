@@ -55,7 +55,3 @@ for t = 1 : epochs
     p = [t+ ": " + cost];
     disp(p);
 end
-
-%plot(pl)
-% ylim([0, 1])
-
